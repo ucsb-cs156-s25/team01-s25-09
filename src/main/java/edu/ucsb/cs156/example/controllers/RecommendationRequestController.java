@@ -18,15 +18,9 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 
 /**
- * REST controller for RecommendationRequest entities.
- *
- * Endpoints
- * ├─ GET    /api/RecommendationRequest/all            – list (index)
- * ├─ GET    /api/RecommendationRequest?id=…           – show
- * ├─ POST   /api/RecommendationRequest/post           – create
- * ├─ DELETE /api/RecommendationRequest?id=…           – delete
- * └─ PUT    /api/RecommendationRequest?id=…           – update
+ * REST controller for RecommendationRequest
  */
+
 @Tag(name = "RecommendationRequest")
 @RequestMapping("/api/RecommendationRequest")
 @RestController
@@ -36,9 +30,6 @@ public class RecommendationRequestController extends ApiController {
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
 
-    // ──────────────────────────────────────────────────────────────
-    // INDEX  (GET /api/RecommendationRequest/all)
-    // ──────────────────────────────────────────────────────────────
     /**
      * List all RecommendationRequests in the database.
      *
@@ -51,11 +42,8 @@ public class RecommendationRequestController extends ApiController {
         return recommendationRequestRepository.findAll();
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // SHOW  (GET /api/RecommendationRequest?id=…)
-    // ──────────────────────────────────────────────────────────────
     /**
-     * Retrieve a single RecommendationRequest by id.
+     * Get a single RecommendationRequest by id.
      *
      * @param id primary-key id of the request
      * @return the RecommendationRequest
@@ -71,9 +59,6 @@ public class RecommendationRequestController extends ApiController {
                         new EntityNotFoundException(RecommendationRequest.class, id));
     }
 
-    // ──────────────────────────────────────────────────────────────
-    // CREATE (POST /api/RecommendationRequest/post)
-    // ──────────────────────────────────────────────────────────────
     /**
      * Create a new RecommendationRequest.
      *
@@ -113,10 +98,6 @@ public class RecommendationRequestController extends ApiController {
 
         return recommendationRequestRepository.save(rr);
     }
-
-    // ──────────────────────────────────────────────────────────────
-    // DELETE (DELETE /api/RecommendationRequest?id=…)
-    // ──────────────────────────────────────────────────────────────
     /**
      * Delete a RecommendationRequest.
      *
