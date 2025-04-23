@@ -1,12 +1,18 @@
 package edu.ucsb.cs156.example.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import edu.ucsb.cs156.example.entities.RecommendationRequest;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface RecommendationRequestRepository 
-       extends JpaRepository<RecommendationRequest, Long> {
+/**
+ * The RecommendationRequestRepository is a repository for RecommendationRequest entities.
+ */
 
-    // This interface is intentionally empty. It inherits methods from JpaRepository.
-    // You can add custom query methods here if needed.
+@Repository
+public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
 
-    }
+  /**
+   * \\ TODO: Do I need any param or return here?
+   */
+  
+}
