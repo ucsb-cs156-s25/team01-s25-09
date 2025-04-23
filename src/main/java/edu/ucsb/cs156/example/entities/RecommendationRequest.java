@@ -1,4 +1,5 @@
 package edu.ucsb.cs156.example.entities;
+// ^ idk why this is highlighted in red, but it is the correct path
 
 import jakarta.persistence.*;
 import lombok.*;
