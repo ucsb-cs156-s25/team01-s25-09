@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
 
   /**
-   * \\ TODO: Do I need any param or return here?
+   * 
    */
-  
+
 }
