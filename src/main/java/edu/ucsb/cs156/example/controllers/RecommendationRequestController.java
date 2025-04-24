@@ -40,60 +40,41 @@ public class RecommendationRequestController extends ApiController {
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
 
-    /**
-     * GET /api/recommendationrequests/all : list all recommendation requests.
-     */
     @Operation(summary = "List all recommendation requests")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
     public Iterable<RecommendationRequest> allRecommendationRequests() {
-        return recommendationRequestRepository.findAll();
+        Iterable<RecommendationRequest> requests = recommendationRequestRepository.findAll();
+        return requests;
     }
 
-    /**
-     * POST /api/recommendationrequests/post : create a new recommendation request.
-     * <p>
-     * Field names align with the Liquibase changelog (RecommendationRequest.json).
-     */
     @Operation(summary = "Create a new recommendation request")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
-            @Parameter(name = "requesterEmail")
-            @RequestParam String requesterEmail,
-
-            @Parameter(name = "professorEmail")
-            @RequestParam String professorEmail,
-
-            @Parameter(name = "explanation")
-            @RequestParam String explanation,
-
-            @Parameter(name = "dateRequested",
-                       description = "date requested (ISO format, e.g. YYYY-MM-DDTHH:MM:SS)")
-            @RequestParam("dateRequested")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @Parameter(name = "requestorEmail") @RequestParam String requestorEmail,
+            @Parameter(name = "professorEmail") @RequestParam String professorEmail,
+            @Parameter(name = "explanation") @RequestParam String explanation,
+            @Parameter(name = "dateRequested", description = "date requested (ISO format, e.g. YYYY-MM-DDTHH:MM:SS)")
+            @RequestParam("dateRequested") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             LocalDateTime dateRequested,
-
-            @Parameter(name = "dateNeeded",
-                       description = "date needed (ISO format, e.g. YYYY-MM-DDTHH:MM:SS)")
-            @RequestParam("dateNeeded")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            @Parameter(name = "dateNeeded", description = "date needed (ISO format, e.g. YYYY-MM-DDTHH:MM:SS)")
+            @RequestParam("dateNeeded") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             LocalDateTime dateNeeded,
-
-            @Parameter(name = "done")
-            @RequestParam boolean done) throws JsonProcessingException {
+            @Parameter(name = "done") @RequestParam boolean done)
+            throws JsonProcessingException {
 
         log.info("dateRequested={}, dateNeeded={}", dateRequested, dateNeeded);
 
         RecommendationRequest recommendationRequest = new RecommendationRequest();
-        recommendationRequest.setRequesterEmail(requesterEmail);
+        recommendationRequest.setRequestorEmail(requestorEmail);
         recommendationRequest.setProfessorEmail(professorEmail);
         recommendationRequest.setExplanation(explanation);
         recommendationRequest.setDateRequested(dateRequested);
         recommendationRequest.setDateNeeded(dateNeeded);
         recommendationRequest.setDone(done);
 
-        return recommendationRequestRepository.save(recommendationRequest);
+        RecommendationRequest savedRequest = recommendationRequestRepository.save(recommendationRequest);
+        return savedRequest;
     }
 }
-
