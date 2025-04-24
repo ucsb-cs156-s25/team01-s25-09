@@ -1,5 +1,4 @@
 package edu.ucsb.cs156.example.entities;
-// ^ idk why this is highlighted in red, but it is the correct path
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,7 +15,9 @@ import java.time.LocalDateTime;
 @Builder
 
 // table name in the database
-@Entity(name = "RecommendationRequest") 
+@Entity
+@Table(name = "RECOMMENDATIONREQUESTS")
+
 
 
 

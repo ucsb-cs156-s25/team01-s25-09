@@ -16,7 +16,7 @@
           "changes": [
             {
               "createTable": {
-                "tableName": "RECOMMENDATION_REQUESTS",
+                "tableName": "RECOMMENDATIONREQUESTS",
                 "columns": [
                   {
                     "column": {
