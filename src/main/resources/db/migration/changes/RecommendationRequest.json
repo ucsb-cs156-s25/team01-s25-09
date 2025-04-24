@@ -5,11 +5,16 @@
           "id": "RecommendationRequest-1",
           "author": "AndrewK",
           "preConditions": [
-            { 
-                "onFail": "MARK_RAN" },
+            {
+              "onFail": "MARK_RAN"
+            },
             {
               "not": [
-                { "tableExists": { "tableName": "RECOMMENDATIONREQUESTS" } }
+                {
+                  "tableExists": {
+                    "tableName": "RECOMMENDATIONREQUESTS"
+                  }
+                }
               ]
             }
           ],
@@ -20,33 +25,37 @@
                 "columns": [
                   {
                     "column": {
+                      "name": "ID",
+                      "type": "BIGINT",
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
                         "primaryKeyName": "RECREQ_PK"
-                      },
-                      "name": "ID",
-                      "type": "BIGINT"
+                      }
                     }
                   },
                   {
                     "column": {
-                      "constraints": { "nullable": false },
                       "name": "REQUESTER_EMAIL",
-                      "type": "VARCHAR(255)"
+                      "type": "VARCHAR(255)",
+                      "constraints": {
+                        "nullable": false
+                      }
                     }
                   },
                   {
                     "column": {
-                      "constraints": { "nullable": false },
                       "name": "PROFESSOR_EMAIL",
-                      "type": "VARCHAR(255)"
+                      "type": "VARCHAR(255)",
+                      "constraints": {
+                        "nullable": false
+                      }
                     }
                   },
                   {
                     "column": {
                       "name": "EXPLANATION",
-                      "type": "VARCHAR(1000)"
+                      "type": "VARCHAR(255)"
                     }
                   },
                   {
@@ -63,9 +72,11 @@
                   },
                   {
                     "column": {
-                      "constraints": { "nullable": false },
                       "name": "DONE",
-                      "type": "BOOLEAN"
+                      "type": "BOOLEAN",
+                      "constraints": {
+                        "nullable": false
+                      }
                     }
                   }
                 ]

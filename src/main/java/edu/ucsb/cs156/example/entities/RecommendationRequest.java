@@ -2,34 +2,26 @@ package edu.ucsb.cs156.example.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.lang.annotation.Inherited;
 import java.time.LocalDateTime;
 
-
-
+/**
+ * This is a JPA entity that represents a recommendation request.
+ */
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-// table name in the database
 @Entity
-@Table(name = "RECOMMENDATIONREQUESTS")
-
-
-
-
+@Table(name = "recommendationrequests")
 public class RecommendationRequest {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private long id;
 
-    private String requestorEmail;
+    private String requesterEmail;
     private String professorEmail;
-    private String explanation;    // Would I need a limitation of length here?
+    private String explanation;
     
     private LocalDateTime dateRequested;
     private LocalDateTime dateNeeded;
