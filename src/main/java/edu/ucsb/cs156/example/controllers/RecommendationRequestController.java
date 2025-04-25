@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import edu.ucsb.cs156.example.entities.RecommendationRequest;
 import edu.ucsb.cs156.example.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 
 import java.time.LocalDate;
 
@@ -56,4 +57,29 @@ public class RecommendationRequestController extends ApiController {
 
         return recommendationRequestRepository.save(req);
     }
+
+
+    /**
+     * Get a single RecommendationRequest by id
+     * 
+     * @param id the id of the RecommendationRequest
+     * @return a RecommendationRequest
+     */
+    @Operation(summary= "Get a single recommendation request")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public RecommendationRequest getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        return recommendationRequest;
+    }
+
+
+
+
+
+
+
 }
