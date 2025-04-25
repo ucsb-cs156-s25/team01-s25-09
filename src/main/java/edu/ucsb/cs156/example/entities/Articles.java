@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
+/**
+ * Entity representing an article
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
