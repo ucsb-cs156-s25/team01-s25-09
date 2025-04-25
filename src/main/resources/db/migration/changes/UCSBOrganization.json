@@ -11,7 +11,7 @@
               "not": [
                 {
                   "tableExists": {
-                    "tableName": "UCSBORGANIZATION"
+                    "tableName": "UCSBORGANIZATIONS"
                   }
                 }
               ]
@@ -27,7 +27,7 @@
                         "primaryKey": true,
                         "primaryKeyName": "UCSBORGANIZATION_PK"
                       },
-                      "name": "CODE",
+                      "name": "ORG_CODE",
                       "type": "VARCHAR(255)"
                     }
                   },
@@ -59,7 +59,7 @@
                     }
                   }]
                 ,
-                "tableName": "UCSBORGANIZATION"
+                "tableName": "UCSBORGANIZATIONS"
               }
             }]
 
