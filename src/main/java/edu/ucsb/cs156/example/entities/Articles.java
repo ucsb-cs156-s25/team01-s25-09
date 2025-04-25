@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +17,9 @@ import java.time.LocalDateTime;
 @Entity(name = "Articles")
 public class Articles {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
+
   private String title;
   private String url;
   private String explanation;
