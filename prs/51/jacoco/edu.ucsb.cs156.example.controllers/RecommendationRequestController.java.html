@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecommendationRequestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">team01</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.example.controllers</a> &gt; <span class="el_source">RecommendationRequestController.java</span></div><h1>RecommendationRequestController.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.example.controllers;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import edu.ucsb.cs156.example.entities.RecommendationRequest;
+import edu.ucsb.cs156.example.repositories.RecommendationRequestRepository;
+
+import java.time.LocalDate;
+
+@Tag(name = &quot;RecommendationRequest&quot;)
+@RequestMapping(&quot;/api/recommendationrequests&quot;)
+@RestController
+<span class="fc" id="L19">@Slf4j</span>
+<span class="fc" id="L20">public class RecommendationRequestController extends ApiController {</span>
+
+    @Autowired
+    RecommendationRequestRepository recommendationRequestRepository;
+
+    @Operation(summary = &quot;List all recommendation requests&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    @GetMapping(&quot;/all&quot;)
+    public Iterable&lt;RecommendationRequest&gt; allRecommendationRequests() {
+<span class="fc" id="L29">        return recommendationRequestRepository.findAll();</span>
+    }
+
+    @Operation(summary = &quot;Create a new recommendation request&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PostMapping(&quot;/post&quot;)
+    public RecommendationRequest postRecommendationRequest(
+            @Parameter(name=&quot;requesterEmail&quot;)   @RequestParam String requesterEmail,
+            @Parameter(name=&quot;professorEmail&quot;)   @RequestParam String professorEmail,
+            @Parameter(name=&quot;explanation&quot;)      @RequestParam String explanation,
+            @Parameter(name=&quot;dateRequested&quot;, description=&quot;YYYY-MM-DD&quot;)
+            @RequestParam(&quot;dateRequested&quot;)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate dateRequested,
+            @Parameter(name=&quot;dateNeeded&quot;, description=&quot;YYYY-MM-DD&quot;)
+            @RequestParam(&quot;dateNeeded&quot;)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate dateNeeded,
+            @Parameter(name=&quot;done&quot;)             @RequestParam boolean done
+    ) {
+<span class="fc" id="L49">        RecommendationRequest req = new RecommendationRequest();</span>
+<span class="fc" id="L50">        req.setRequesterEmail(requesterEmail);</span>
+<span class="fc" id="L51">        req.setProfessorEmail(professorEmail);</span>
+<span class="fc" id="L52">        req.setExplanation(explanation);</span>
+<span class="fc" id="L53">        req.setDateRequested(dateRequested.atStartOfDay());</span>
+<span class="fc" id="L54">        req.setDateNeeded(dateNeeded.atStartOfDay());</span>
+<span class="fc" id="L55">        req.setDone(done);</span>
+
+<span class="fc" id="L57">        return recommendationRequestRepository.save(req);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
