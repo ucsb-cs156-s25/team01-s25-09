@@ -59,7 +59,7 @@
                   },
                   {
                     "column": {
-                      "name": "LOCAL_DATE_TIME",
+                      "name": "DATE_ADDED",
                       "type": "TIMESTAMP"
                     }
                   }
