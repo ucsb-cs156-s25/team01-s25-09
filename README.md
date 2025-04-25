@@ -2,8 +2,6 @@ team01-s25-09
 
 Instructions: <https://ucsb-cs156.github.io/s25/lab/team01.html>
 
-TODO: Add a link to the deployed Dokku app for your team here, e.g.
-
 Deployments:
 
 NOTE: Following links have not been deployed yet.
