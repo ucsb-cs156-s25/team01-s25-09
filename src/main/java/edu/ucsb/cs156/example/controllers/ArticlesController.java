@@ -27,7 +27,9 @@ import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
 
-
+/**
+ * This is a REST controller for Articles
+ */
 @Tag(name = "Articles")
 @RequestMapping("/api/articles")
 @RestController
@@ -37,6 +39,11 @@ public class ArticlesController extends ApiController {
     @Autowired
     ArticlesRepository articlesRepository;
 
+    /**
+     * List all Articles
+     * 
+     * @return an iterable of Articles
+     */
     @Operation(summary= "List all Articles")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")	
@@ -45,14 +52,16 @@ public class ArticlesController extends ApiController {
         return articles;
     }
 
-
-     /**
-     * Create a new date
+    /**
+     * Create a new article
      * 
-     * @param quarterYYYYQ  the quarter in the format YYYYQ
-     * @param name          the name of the date
-     * @param localDateTime the date
-     * @return the saved ucsbdate
+     * @param title        the title of the article
+     * @param url          the URL of the article
+     * @param explanation  the explanation of the article
+     * @param email        the email of the user who posted the article
+     * @param dateAdded    the date the article was added
+     * @return the saved article
+     * @throws JsonProcessingException on error in processing JSON
      */
     @Operation(summary= "Create a new article")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -81,5 +90,4 @@ public class ArticlesController extends ApiController {
 
         return savedArticles;
     }
-
 }
