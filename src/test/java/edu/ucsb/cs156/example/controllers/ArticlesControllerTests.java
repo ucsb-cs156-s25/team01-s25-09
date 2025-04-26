@@ -42,6 +42,9 @@ import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 
@@ -387,6 +390,48 @@ public void test_updateArticle_notFound() throws Exception {
     verify(articlesRepository, times(0)).save(any(Articles.class)); // no save if not found
 }
 
+
+@Test
+@WithMockUser(roles = { "ADMIN" })
+public void test_deleteArticle_success() throws Exception {
+    // arrange
+    Articles article = Articles.builder()
+            .title("Test Title")
+            .url("https://example.com")
+            .explanation("Test explanation")
+            .email("test@example.com")
+            .dateAdded(LocalDateTime.now())
+            .build();
+    article.setId(123L);
+
+    when(articlesRepository.findById(123L)).thenReturn(Optional.of(article));
+
+    // act
+    MvcResult response = mockMvc.perform(delete("/api/articles?id=123").with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(articlesRepository, times(1)).findById(123L);
+    verify(articlesRepository, times(1)).delete(article);
+
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals("record 123 deleted", responseString);
+}
+
+@Test
+@WithMockUser(roles = { "ADMIN" })
+public void test_deleteArticle_notFound() throws Exception {
+    // arrange
+    when(articlesRepository.findById(123L)).thenReturn(Optional.empty());
+
+    // act
+    mockMvc.perform(delete("/api/articles?id=123").with(csrf()))
+            .andExpect(status().isNotFound());
+
+    // assert
+    verify(articlesRepository, times(1)).findById(123L);
+}
 
 
 }

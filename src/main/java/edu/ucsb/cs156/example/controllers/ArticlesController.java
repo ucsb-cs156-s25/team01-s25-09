@@ -155,4 +155,18 @@ public Articles updateArticle(
     return updatedArticles;
 }
 
+@Operation(summary = "Delete an article by id")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
+@DeleteMapping("")
+public String deleteArticle(
+        @Parameter(name = "id", description = "ID of article to delete") @RequestParam Long id) {
+
+    Articles article = articlesRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
+
+    articlesRepository.delete(article);
+    return String.format("record %d deleted", id);
+}
+
+
 }
