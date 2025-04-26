@@ -33,13 +33,24 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.ArgumentCaptor;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import org.mockito.ArgumentCaptor;
+import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 
 
 @WebMvcTest(controllers = ArticlesController.class)
 @Import(TestConfig.class)
 public class ArticlesControllerTests extends ControllerTestCase {
-
+        @Autowired
+        private ObjectMapper objectMapper;
+        
         @MockBean
         ArticlesRepository articlesRepository;
 
@@ -289,6 +300,91 @@ public void getById_whenNotExists_returns404() throws Exception {
         .andExpect(status().isNotFound());  // ✅ Only check 404 status!
 
     verify(articlesRepository, times(1)).findById(eq(id));
+}
+
+
+@Test
+@WithMockUser(roles = { "ADMIN" })
+public void test_updateArticle_success() throws Exception {
+    // arrange
+    Articles originalArticle = Articles.builder()
+            .title("Original Title")
+            .url("https://original-url.com")
+            .explanation("Original explanation")
+            .email("original@example.com")
+            .dateAdded(LocalDateTime.parse("2025-04-24T12:00:00"))
+            .build();
+    originalArticle.setId(123L);
+
+    Articles incomingUpdate = Articles.builder()
+            .title("Updated Title")
+            .url("https://updated-url.com")
+            .explanation("Updated explanation")
+            .email("updated@example.com")
+            .dateAdded(LocalDateTime.parse("2025-04-25T15:00:00"))
+            .build();
+
+    Articles expectedUpdated = Articles.builder()
+            .title("Updated Title")
+            .url("https://updated-url.com")
+            .explanation("Updated explanation")
+            .email("updated@example.com")
+            .dateAdded(LocalDateTime.parse("2025-04-25T15:00:00"))
+            .build();
+    expectedUpdated.setId(123L);
+
+    when(articlesRepository.findById(123L)).thenReturn(Optional.of(originalArticle));
+    when(articlesRepository.save(any(Articles.class))).thenReturn(expectedUpdated);
+
+    // act
+    MvcResult response = mockMvc.perform(put("/api/articles?id=123")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(incomingUpdate)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.title").value("Updated Title"))
+            .andExpect(jsonPath("$.url").value("https://updated-url.com"))
+            .andExpect(jsonPath("$.explanation").value("Updated explanation"))
+            .andExpect(jsonPath("$.email").value("updated@example.com"))
+            .andExpect(jsonPath("$.dateAdded").exists())
+            .andReturn();
+
+    // verify database save
+    ArgumentCaptor<Articles> articlesCaptor = ArgumentCaptor.forClass(Articles.class);
+    verify(articlesRepository).save(articlesCaptor.capture());
+    Articles savedArticle = articlesCaptor.getValue();
+
+    assertEquals("Updated Title", savedArticle.getTitle());
+    assertEquals("https://updated-url.com", savedArticle.getUrl());
+    assertEquals("Updated explanation", savedArticle.getExplanation());
+    assertEquals("updated@example.com", savedArticle.getEmail());
+    assertEquals(LocalDateTime.parse("2025-04-25T15:00:00"), savedArticle.getDateAdded());
+}
+
+
+@Test
+@WithMockUser(roles = { "ADMIN" })
+public void test_updateArticle_notFound() throws Exception {
+    // arrange
+    Articles incomingUpdate = Articles.builder()
+            .title("Updated Title")
+            .url("https://updated-url.com")
+            .explanation("Updated explanation")
+            .email("updated@example.com")
+            .dateAdded(LocalDateTime.parse("2025-04-25T15:00:00"))
+            .build();
+
+    when(articlesRepository.findById(123L)).thenReturn(Optional.empty());
+
+    // act + assert
+    mockMvc.perform(put("/api/articles?id=123")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(incomingUpdate)))
+            .andExpect(status().isNotFound());
+
+    verify(articlesRepository, times(1)).findById(123L);
+    verify(articlesRepository, times(0)).save(any(Articles.class)); // no save if not found
 }
 
 
