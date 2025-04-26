@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
  */
 
 @Tag(name = &quot;HelpRequest&quot;)
-@RequestMapping(&quot;/api/HelpRequests&quot;)
+@RequestMapping(&quot;/api/helprequests&quot;)
 @RestController
 <span class="fc" id="L37">@Slf4j</span>
 <span class="fc" id="L38">public class HelpRequestController extends ApiController {</span>
@@ -93,6 +93,23 @@ import java.time.LocalDateTime;
 <span class="fc" id="L93">        HelpRequest savedHelpRequest = helpRequestRepository.save(helpRequest);</span>
 
 <span class="fc" id="L95">        return savedHelpRequest;</span>
+    }
+
+    /**
+     * Get a single help request by id
+     * 
+     * @param id the id of the help request
+     * @return a help request
+     */
+    @Operation(summary= &quot;Get a single help request&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    @GetMapping(&quot;&quot;)
+    public HelpRequest getById(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L109">        HelpRequest helpRequest = helpRequestRepository.findById(id)</span>
+<span class="fc" id="L110">                .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
+
+<span class="fc" id="L112">        return helpRequest;</span>
     }
 
 }
