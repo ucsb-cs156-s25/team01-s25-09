@@ -26,6 +26,23 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Optional;
+import edu.ucsb.cs156.example.entities.Articles;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+
+
+
+
 
 /**
  * This is a REST controller for Articles
@@ -89,5 +106,26 @@ public class ArticlesController extends ApiController {
         Articles savedArticles = articlesRepository.save(articles);
 
         return savedArticles;
+    }
+
+ /**
+ * Get a single article by id
+ * 
+ * @param id the id of the article
+ * @return the article
+ * @throws EntityNotFoundException if the article is not found
+ */
+
+// …
+
+ @Operation(summary = "Get a single article")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("")
+    public Articles getById(@RequestParam Long id) {
+        return articlesRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "id " + id + " not found"
+            ));
     }
 }

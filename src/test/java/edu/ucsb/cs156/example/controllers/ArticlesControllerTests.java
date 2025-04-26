@@ -32,6 +32,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.ArgumentCaptor;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 
 @WebMvcTest(controllers = ArticlesController.class)
@@ -238,5 +240,57 @@ public void test_all_properties_are_set_correctly() throws Exception {
     assertEquals("test@example.com", savedArticle.getEmail());
     assertEquals(ldt, savedArticle.getDateAdded());
 }
+
+    @Test
+@WithMockUser(roles = "USER")
+public void getById_whenExists_returnsJson() throws Exception {
+    // arrange
+    Long id = 123L;
+    Articles article = new Articles();
+    article.setId(id);
+    article.setTitle("Test Title");
+    article.setUrl("http://example.com");
+    article.setExplanation("An explanation");
+    article.setEmail("me@example.com");
+    article.setDateAdded(LocalDateTime.now());   // ← supply a LocalDateTime
+
+    when(articlesRepository.findById(eq(id)))
+        .thenReturn(Optional.of(article));
+
+    // act + assert
+    mockMvc.perform(get("/api/articles")
+            .param("id", id.toString())
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.id").value(id))
+        .andExpect(jsonPath("$.title").value("Test Title"))
+        .andExpect(jsonPath("$.url").value("http://example.com"))
+        .andExpect(jsonPath("$.explanation").value("An explanation"))
+        .andExpect(jsonPath("$.email").value("me@example.com"))
+        .andExpect(jsonPath("$.dateAdded").exists());
+
+    verify(articlesRepository, times(1)).findById(eq(id));
+}
+
+    //
+    // 2) NOT FOUND CASE → returns 404 + { "message": "id {id} not found" }
+    //
+@Test
+@WithMockUser(roles = "USER")
+public void getById_whenNotExists_returns404() throws Exception {
+    Long id = 7L;
+    when(articlesRepository.findById(eq(id)))
+        .thenReturn(Optional.empty());
+
+    mockMvc.perform(get("/api/articles")
+            .param("id", id.toString())
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());  // ✅ Only check 404 status!
+
+    verify(articlesRepository, times(1)).findById(eq(id));
+}
+
+
 
 }
