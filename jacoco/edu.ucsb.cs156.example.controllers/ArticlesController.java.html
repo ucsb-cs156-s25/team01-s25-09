@@ -125,5 +125,35 @@ public Articles getById(@RequestParam Long id) {
 <span class="fc" id="L125">    return articlesRepository.findById(id)</span>
 <span class="fc" id="L126">        .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
 }
+
+/**
+ * Update an existing article
+ * 
+ * @param id the id of the article to update
+ * @param incoming the new data for the article (JSON)
+ * @return the updated article
+ * @throws EntityNotFoundException if the article with the given id is not found
+ */
+@Operation(summary = &quot;Update an existing article&quot;)
+@PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+@PutMapping(&quot;&quot;)
+public Articles updateArticle(
+        @Parameter(name = &quot;id&quot;, description = &quot;ID of the article to update&quot;) @RequestParam Long id,
+        @RequestBody @Valid Articles incoming) {
+
+<span class="fc" id="L144">    Articles articles = articlesRepository.findById(id)</span>
+<span class="fc" id="L145">            .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
+
+<span class="fc" id="L147">    articles.setTitle(incoming.getTitle());</span>
+<span class="fc" id="L148">    articles.setUrl(incoming.getUrl());</span>
+<span class="fc" id="L149">    articles.setExplanation(incoming.getExplanation());</span>
+<span class="fc" id="L150">    articles.setEmail(incoming.getEmail());</span>
+<span class="fc" id="L151">    articles.setDateAdded(incoming.getDateAdded());</span>
+
+<span class="fc" id="L153">    Articles updatedArticles = articlesRepository.save(articles);</span>
+
+<span class="fc" id="L155">    return updatedArticles;</span>
+}
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
