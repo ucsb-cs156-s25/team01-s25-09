@@ -125,4 +125,34 @@ public Articles getById(@RequestParam Long id) {
     return articlesRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
 }
+
+/**
+ * Update an existing article
+ * 
+ * @param id the id of the article to update
+ * @param incoming the new data for the article (JSON)
+ * @return the updated article
+ * @throws EntityNotFoundException if the article with the given id is not found
+ */
+@Operation(summary = "Update an existing article")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PutMapping("")
+public Articles updateArticle(
+        @Parameter(name = "id", description = "ID of the article to update") @RequestParam Long id,
+        @RequestBody @Valid Articles incoming) {
+
+    Articles articles = articlesRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
+
+    articles.setTitle(incoming.getTitle());
+    articles.setUrl(incoming.getUrl());
+    articles.setExplanation(incoming.getExplanation());
+    articles.setEmail(incoming.getEmail());
+    articles.setDateAdded(incoming.getDateAdded());
+
+    Articles updatedArticles = articlesRepository.save(articles);
+
+    return updatedArticles;
+}
+
 }
