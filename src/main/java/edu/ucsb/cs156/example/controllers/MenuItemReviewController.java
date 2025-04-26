@@ -91,5 +91,22 @@ MenuItemReview savedMenuItemReview = menuItemReviewRepository.save(menuItemRevie
 return savedMenuItemReview;
 }
 
+ /**
+     * Get a single date by id
+     * 
+     * @param id the id of the menu item review
+     * @return a menu item review
+     */
+    @Operation(summary= "Get a single menu item review")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public MenuItemReview getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        MenuItemReview menuItemReview = menuItemReviewRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(MenuItemReview.class, id));
+
+        return menuItemReview;
+    }
+
 
 }
