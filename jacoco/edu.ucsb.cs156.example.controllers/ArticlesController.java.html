@@ -155,5 +155,19 @@ public Articles updateArticle(
 <span class="fc" id="L155">    return updatedArticles;</span>
 }
 
+@Operation(summary = &quot;Delete an article by id&quot;)
+@PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+@DeleteMapping(&quot;&quot;)
+public String deleteArticle(
+        @Parameter(name = &quot;id&quot;, description = &quot;ID of article to delete&quot;) @RequestParam Long id) {
+
+<span class="fc" id="L164">    Articles article = articlesRepository.findById(id)</span>
+<span class="fc" id="L165">            .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
+
+<span class="fc" id="L167">    articlesRepository.delete(article);</span>
+<span class="fc" id="L168">    return String.format(&quot;record %d deleted&quot;, id);</span>
+}
+
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
