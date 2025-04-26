@@ -172,20 +172,21 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
                                 .orgCode("ZPR")
                                 .orgTranslationShort("ZETA PHI RHO")
                                 .orgTranslation("ZETA PHI RHO")
-                                .inactive(false)
+                                .inactive(true)
                                 .build();
 
                 when(ucsbOrganizationRepository.save(eq(ZPR))).thenReturn(ZPR);
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/ucsborganizations/post?orgCode=ZPR&orgTranslationShort=ZETA PHI RHO&orgTranslation=ZETA PHI RHO&inactive=false")
+                                post("/api/ucsborganizations/post?orgCode=ZPR&orgTranslationShort=ZETA PHI RHO&orgTranslation=ZETA PHI RHO&inactive=true")
                                                 .with(csrf()))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
                 verify(ucsbOrganizationRepository, times(1)).save(ZPR);
                 String expectedJson = mapper.writeValueAsString(ZPR);
+                assertEquals(ZPR.getInactive(), true);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
@@ -245,15 +246,15 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
 
                 UCSBOrganization ZPROrig = UCSBOrganization.builder()
                                 .orgCode("ZPR")
-                                .orgTranslationShort("ZETA PHI RHO")
-                                .orgTranslation("ZETA PHI RHO")
+                                .orgTranslationShort("ZETA PHI RHO OLD")
+                                .orgTranslation("ZETA PHI RHO OLD")
                                 .inactive(false)
                                 .build();
 
                 UCSBOrganization ZPREdited = UCSBOrganization.builder()
                                 .orgCode("ZPR")
-                                .orgTranslationShort("ZETA PHI RHO")
-                                .orgTranslation("ZETA PHI RHO")
+                                .orgTranslationShort("ZETA PHI RHO NEW")
+                                .orgTranslation("ZETA PHI RHO NEW")
                                 .inactive(true)
                                 .build();
 
@@ -273,6 +274,11 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
                 // assert
                 verify(ucsbOrganizationRepository, times(1)).findById("ZPR");
                 verify(ucsbOrganizationRepository, times(1)).save(ZPREdited); // should be saved with updated info
+                
+                assertEquals(ZPREdited.getOrgTranslationShort(), ZPROrig.getOrgTranslationShort());
+                assertEquals(ZPREdited.getOrgTranslation(), ZPROrig.getOrgTranslation());
+                assertEquals(ZPREdited.getInactive(), ZPROrig.getInactive());
+                
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(requestBody, responseString);
         }
