@@ -13,13 +13,22 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
     
 
+/**
+ * This is a JPA entity that represents a menu item review.
+ */
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "MenuItemReview")
+@Entity(name = "menuitemreviews")
 public class MenuItemReview {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+
     private long itemId;
     private String reviewerEmail;
     private int stars;
