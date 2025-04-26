@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=vscode-file://vscode-app/c:/Applications/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html
+HostUrl=file://wsl.localhost/Ubuntu/home/fred/cs156/team01-s25-09/src/main/resources/db/migration/changes/UCSBOrganization.json
