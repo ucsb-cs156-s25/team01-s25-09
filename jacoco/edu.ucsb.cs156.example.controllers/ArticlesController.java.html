@@ -26,6 +26,23 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Optional;
+import edu.ucsb.cs156.example.entities.Articles;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+
+
+
+
 
 /**
  * This is a REST controller for Articles
@@ -33,8 +50,8 @@ import java.time.LocalDateTime;
 @Tag(name = &quot;Articles&quot;)
 @RequestMapping(&quot;/api/articles&quot;)
 @RestController
-<span class="fc" id="L36">@Slf4j</span>
-<span class="fc" id="L37">public class ArticlesController extends ApiController {</span>
+<span class="fc" id="L53">@Slf4j</span>
+<span class="fc" id="L54">public class ArticlesController extends ApiController {</span>
 
     @Autowired
     ArticlesRepository articlesRepository;
@@ -48,8 +65,8 @@ import java.time.LocalDateTime;
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;/all&quot;)	
     public Iterable&lt;Articles&gt; allArticles() {
-<span class="fc" id="L51">        Iterable&lt;Articles&gt; articles = articlesRepository.findAll();</span>
-<span class="fc" id="L52">        return articles;</span>
+<span class="fc" id="L68">        Iterable&lt;Articles&gt; articles = articlesRepository.findAll();</span>
+<span class="fc" id="L69">        return articles;</span>
     }
 
     /**
@@ -77,18 +94,36 @@ import java.time.LocalDateTime;
         // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         // See: https://www.baeldung.com/spring-date-parameters
 
-<span class="fc" id="L80">        log.info(&quot;dateAdded={}&quot;, dateAdded);</span>
+<span class="fc" id="L97">        log.info(&quot;dateAdded={}&quot;, dateAdded);</span>
 
-<span class="fc" id="L82">        Articles articles = new Articles();</span>
-<span class="fc" id="L83">        articles.setTitle(title);</span>
-<span class="fc" id="L84">        articles.setUrl(url);</span>
-<span class="fc" id="L85">        articles.setExplanation(explanation);</span>
-<span class="fc" id="L86">        articles.setEmail(email);</span>
-<span class="fc" id="L87">        articles.setDateAdded(dateAdded);</span>
+<span class="fc" id="L99">        Articles articles = new Articles();</span>
+<span class="fc" id="L100">        articles.setTitle(title);</span>
+<span class="fc" id="L101">        articles.setUrl(url);</span>
+<span class="fc" id="L102">        articles.setExplanation(explanation);</span>
+<span class="fc" id="L103">        articles.setEmail(email);</span>
+<span class="fc" id="L104">        articles.setDateAdded(dateAdded);</span>
 
-<span class="fc" id="L89">        Articles savedArticles = articlesRepository.save(articles);</span>
+<span class="fc" id="L106">        Articles savedArticles = articlesRepository.save(articles);</span>
 
-<span class="fc" id="L91">        return savedArticles;</span>
+<span class="fc" id="L108">        return savedArticles;</span>
     }
+
+ /**
+ * Get a single article by id
+ * 
+ * @param id the id of the article
+ * @return the article
+ * @throws EntityNotFoundException if the article is not found
+ */
+
+// …
+
+@Operation(summary = &quot;Get a single article&quot;)
+@PreAuthorize(&quot;hasRole('USER')&quot;)
+@GetMapping(&quot;&quot;)
+public Articles getById(@RequestParam Long id) {
+<span class="fc" id="L125">    return articlesRepository.findById(id)</span>
+<span class="fc" id="L126">        .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
+}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
