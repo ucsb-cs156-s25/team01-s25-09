@@ -32,22 +32,21 @@ import java.time.LocalDateTime;
  * This is a REST controller for UCSBDiningCommonsMenuItem
  */
 
- @Tag(name = "UCSBDiningCommonsMenuItem")
- @RequestMapping("/api/ucsbdiningcommonsmenuitem")
- @RestController
- @Slf4j
+@Tag(name = "UCSBDiningCommonsMenuItem")
+@RequestMapping("/api/ucsbdiningcommonsmenuitem")
+@RestController
+@Slf4j
 public class UCSBDiningCommonsMenuItemController extends ApiController {
-  
+
   @Autowired
   UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
-
 
   /**
    * List all UCSB Dining Commmons Menu Items
    * 
    * @return an iterable of UCSBDiningCommonsMenuItem
    */
-  @Operation(summary= "List all ucsb items")
+  @Operation(summary = "List all ucsb items")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
   public Iterable<UCSBDiningCommonsMenuItem> allUCSBDiningCommonsMenuItem() {
@@ -55,32 +54,49 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
     return items;
   }
 
+  /**
+   * Get a single item by id
+   * 
+   * @param id the id of the item
+   * @return a UCSBDiningCommonsMenuItem
+   */
+  @Operation(summary = "Get a single item")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public UCSBDiningCommonsMenuItem getById(
+      @Parameter(name = "id") @RequestParam Long id) {
+    UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem = ucsbDiningCommonsMenuItemRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
+
+    return ucsbDiningCommonsMenuItem;
+  }
 
   /**
-    * Create a new item
-    * 
-    * @param diningCommonsCode  the code of the dining common
-    * @param name          the name of the itenm
-    * @param station the station where the item is located
-    * @return the saved item
-    */
-  @Operation(summary= "Create a new item")
+   * Create a new item
+   * 
+   * @param diningCommonsCode the code of the dining common
+   * @param name              the name of the itenm
+   * @param station           the station where the item is located
+   * @return the saved item
+   */
+  @Operation(summary = "Create a new item")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/post")
   public UCSBDiningCommonsMenuItem postUCSBDiningCommonsMenuItem(
-        @Parameter(name="diningCommonsCode") @RequestParam String diningCommonsCode,
-        @Parameter(name="name") @RequestParam String name,
-        @Parameter(name="station") @RequestParam String station)
-        throws JsonProcessingException {
-          
-          UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem = new UCSBDiningCommonsMenuItem();
-          ucsbDiningCommonsMenuItem.setDiningCommonsCode(diningCommonsCode);
-          ucsbDiningCommonsMenuItem.setName(name);
-          ucsbDiningCommonsMenuItem.setStation(station);
-  
-          UCSBDiningCommonsMenuItem savedUcsbDiningCommonsMenuItem = ucsbDiningCommonsMenuItemRepository.save(ucsbDiningCommonsMenuItem);
-          
-          return savedUcsbDiningCommonsMenuItem;
-        }
+      @Parameter(name = "diningCommonsCode") @RequestParam String diningCommonsCode,
+      @Parameter(name = "name") @RequestParam String name,
+      @Parameter(name = "station") @RequestParam String station)
+      throws JsonProcessingException {
+
+    UCSBDiningCommonsMenuItem ucsbDiningCommonsMenuItem = new UCSBDiningCommonsMenuItem();
+    ucsbDiningCommonsMenuItem.setDiningCommonsCode(diningCommonsCode);
+    ucsbDiningCommonsMenuItem.setName(name);
+    ucsbDiningCommonsMenuItem.setStation(station);
+
+    UCSBDiningCommonsMenuItem savedUcsbDiningCommonsMenuItem = ucsbDiningCommonsMenuItemRepository
+        .save(ucsbDiningCommonsMenuItem);
+
+    return savedUcsbDiningCommonsMenuItem;
+  }
 
 }
