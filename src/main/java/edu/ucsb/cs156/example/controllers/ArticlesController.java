@@ -118,14 +118,11 @@ public class ArticlesController extends ApiController {
 
 // …
 
- @Operation(summary = "Get a single article")
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("")
-    public Articles getById(@RequestParam Long id) {
-        return articlesRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "id " + id + " not found"
-            ));
-    }
+@Operation(summary = "Get a single article")
+@PreAuthorize("hasRole('USER')")
+@GetMapping("")
+public Articles getById(@RequestParam Long id) {
+    return articlesRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
+}
 }
