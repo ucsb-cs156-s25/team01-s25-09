@@ -253,7 +253,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                                 .explanation("BS/MS program")
                                 .dateRequested(ldt1)
                                 .dateNeeded(ldt2)
-                                .done(false)
+                                .done(true)
                                 .build();
 
                 RecommendationRequest recommendationRequestEdited = RecommendationRequest.builder()
@@ -301,7 +301,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                                 .explanation("BS/MS program")
                                 .dateRequested(ldt1)
                                 .dateNeeded(ldt2)
-                                .done(false)
+                                .done(true)
                                 .build();
 
 
