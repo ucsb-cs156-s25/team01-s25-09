@@ -4,7 +4,6 @@ Instructions: <https://ucsb-cs156.github.io/s25/lab/team01.html>
 
 Deployments:
 
-NOTE: Following links have not been deployed yet.
 * Prod: <https://team01.dokku-09.cs.ucsb.edu>
 * QA: <https://team01-qa.dokku-09.cs.ucsb.edu>
 
