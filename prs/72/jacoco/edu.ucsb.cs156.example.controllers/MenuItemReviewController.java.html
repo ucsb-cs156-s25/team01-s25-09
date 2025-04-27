@@ -136,6 +136,25 @@ throws JsonProcessingException {
 <span class="fc" id="L136">        return menuItemReview;</span>
     }
 
+    /**
+     * Delete a menu item review
+     * 
+     * @param id the id of the menu item review to delete
+     * @return a message indicating the menu item review was deleted
+     */
+    @Operation(summary= &quot;Delete a menu item review&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteMenuItemReview(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L150">        MenuItemReview  menuItemReview = menuItemReviewRepository.findById(id)</span>
+<span class="fc" id="L151">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+
+<span class="fc" id="L153">        menuItemReviewRepository.delete(menuItemReview);</span>
+<span class="fc" id="L154">        return genericMessage(&quot;Menu Item Review with id %s deleted&quot;.formatted(id));</span>
+    }
+
+
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
