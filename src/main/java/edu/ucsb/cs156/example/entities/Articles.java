@@ -17,7 +17,7 @@ import jakarta.persistence.GenerationType;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "Articles")
+@Entity(name = "articles")
 public class Articles {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
