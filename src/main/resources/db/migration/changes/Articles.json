@@ -3,7 +3,7 @@
       {
         "changeSet": {
           "id": "Articles-1",
-          "author": "MattP",
+          "author": "MoiezB",
           "preConditions": [
             {
               "onFail": "MARK_RAN"
@@ -12,7 +12,7 @@
               "not": [
                 {
                   "tableExists": {
-                    "tableName": "Articles"
+                    "tableName": "ARTICLES"
                   }
                 }
               ]
@@ -27,7 +27,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "Articles_PK"
+                        "primaryKeyName": "ARTICLES_PK"
                       },
                       "name": "ID",
                       "type": "BIGINT"
@@ -64,7 +64,7 @@
                     }
                   }
                 ],
-                "tableName": "Articles"
+                "tableName": "ARTICLES"
               }
             }
           ]
